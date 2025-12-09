@@ -45,5 +45,18 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+		<!-- CAMERA PERMISSION -->
+	<key>NSCameraUsageDescription</key>
+	<string>This app requires camera access to capture photos for reporting lost and found items.</string>
+
+	<!-- PHOTO LIBRARY (GALLERY) PERMISSION -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to your photo library to upload images for lost and found reports.</string>
+
+	<!-- iOS 11+ photo additions permission (optional but recommended) -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app needs permission to save images to your photo library.</string>
+	
 </dict>
 </plist>
