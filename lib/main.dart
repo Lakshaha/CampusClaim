@@ -1,4 +1,5 @@
 // ignore_for_file: camel_case_types
+import 'package:campus_claim/Screens/Updating_item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/add_item_screen.dart';
@@ -25,6 +26,7 @@ class Campus_claim extends StatelessWidget {
         '/': (context) => Starting(),
         'add_item': (context) => AddItemsList(),
         'item_list': (context) => ItemListScroll(),
+        'update_item': (context) => updating_Item_Screen(),
       },
     );
   }

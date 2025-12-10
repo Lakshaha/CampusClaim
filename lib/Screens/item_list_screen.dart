@@ -1,3 +1,5 @@
+import 'package:campus_claim/Screens/Updating_item_screen.dart';
+import 'package:campus_claim/Screens/add_item_screen.dart';
 import 'package:flutter/material.dart';
 
 class ItemListScroll extends StatefulWidget {
@@ -27,18 +29,47 @@ class _ItemListScrollState extends State<ItemListScroll> {
         ),
       ),
       body: Text('Body'),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.upload),
-            label: 'Upload item',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Lost items'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.restart_alt),
-            label: 'Update item',
-          ),
-        ],
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        height: 80,
+        width: 393,
+        decoration: BoxDecoration(
+          color: Color(0xFFA855F7),
+          border: Border.all(color: Colors.white, width: 2),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => AddItemsList()),
+                );
+              },
+              icon: Icon(Icons.upload, size: 36, color: Colors.black),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ItemListScroll()),
+                );
+              },
+              icon: Icon(Icons.list, size: 36, color: Colors.black),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => updating_Item_Screen()),
+                );
+              },
+              icon: Icon(Icons.update, size: 32, color: Colors.black),
+            ),
+          ],
+        ),
       ),
     );
   }
