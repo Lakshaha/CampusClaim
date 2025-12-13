@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:campus_claim/models/lost_item_model.dart';
+import 'package:campus_claim/services/item_service.dart';
+import 'package:campus_claim/services/storage_service.dart';
 
 import 'package:campus_claim/Screens/Updating_item_screen.dart';
 import 'package:campus_claim/Screens/item_list_screen.dart';
@@ -17,6 +22,8 @@ class _AddItemsListState extends State<AddItemsList> {
   final nameController = TextEditingController();
   final contactController = TextEditingController();
   final locationController = TextEditingController();
+  final ItemService itemService = ItemService();
+  final StorageService storageService = StorageService();
   bool name = false;
   bool number = false;
   bool loc = false;
@@ -37,8 +44,23 @@ class _AddItemsListState extends State<AddItemsList> {
       return false;
     }
 
+    if (name == true && number == false && loc == false) {
+      showMessage("Please Enter Contact Details and location");
+      return false;
+    }
+
+    if (name == false && number == true && loc == false) {
+      showMessage("Please Enter Item Name and location");
+      return false;
+    }
+
+    if (name == false && number == false && loc == true) {
+      showMessage("Please Enter Item Name and Contact Details");
+      return false;
+    }
+
     if (name == false) {
-      showMessage("Please Enter Your Name");
+      showMessage("Please Enter Item Name");
       return false;
     }
 
@@ -247,28 +269,40 @@ class _AddItemsListState extends State<AddItemsList> {
                   decoration: BoxDecoration(
                     color: Color(0xFFD9D9D9),
                     borderRadius: BorderRadius.circular(20),
+                    image: imageFile != null
+                        ? DecorationImage(
+                            image: FileImage(imageFile!),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
                   ),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 23),
-                      Center(
-                        child: Text(
-                          'Upload Picture',
-                          style: TextStyle(
-                            fontFamily: 'Manrope',
-                            fontSize: 20,
-                            color: Color(0xFF4F46E5),
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          showImageSourceDialog();
-                        },
-                        icon: Icon(Icons.upload, size: 27, color: Colors.black),
-                      ),
-                    ],
-                  ),
+                  child: imageFile == null
+                      ? Column(
+                          children: [
+                            SizedBox(height: 23),
+                            Center(
+                              child: Text(
+                                'Upload Picture',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontSize: 20,
+                                  color: Color(0xFF4F46E5),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                showImageSourceDialog();
+                              },
+                              icon: Icon(
+                                Icons.upload,
+                                size: 27,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        )
+                      : null,
                 ),
               ],
             ),
@@ -283,12 +317,41 @@ class _AddItemsListState extends State<AddItemsList> {
             ),
 
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (Check_condition()) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => ItemListScroll()),
-                  );
+                  try {
+                    showMessage("Uploading...");
+                    String? imageUrl;
+                    // if (imageFile != null) {
+                    //   imageUrl = await storageService.uploadImage(imageFile!);
+                    // }
+
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user == null) {
+                      showMessage("Auth Error. Please restart the app");
+                      return;
+                    }
+
+                    //final uid = FirebaseAuth.instance.currentUser?.uid ?? "unknown";
+                    final item = Item(
+                      itemName: nameController.text.trim(),
+                      contactDetails: contactController.text.trim(),
+                      location: locationController.text.trim(),
+                      createdAt: DateTime.now(),
+                      imageUrl: null,
+                      userId: user.uid,
+                    );
+                    await itemService.uploadItem(item);
+
+                    showMessage("Item uploaded Successfully!");
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => ItemListScroll()),
+                    );
+                  } catch (e) {
+                    showMessage("Error Uploading: $e");
+                  }
                 }
               },
               style: ElevatedButton.styleFrom(

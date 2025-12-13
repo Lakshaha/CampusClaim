@@ -1,13 +1,21 @@
 // ignore_for_file: camel_case_types
 import 'package:campus_claim/Screens/Updating_item_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/add_item_screen.dart';
 import 'Screens/item_list_screen.dart';
 import 'Screens/starting_screen.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final auth = FirebaseAuth.instance;
+  if (auth.currentUser == null) {
+    await auth.signInAnonymously();
+  }
   final prefs = await SharedPreferences.getInstance();
   final completed = prefs.getBool("onboarding_completed") ?? false;
 

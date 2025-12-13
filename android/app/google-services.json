@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1075209502904",
+    "project_id": "campus-claim",
+    "storage_bucket": "campus-claim.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075209502904:android:bd2bc3d37fad843634744d",
+        "android_client_info": {
+          "package_name": "com.example.campus_claim"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZoCvVtqaEaOgLpbxEQ4-RdokH5B1ueio"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

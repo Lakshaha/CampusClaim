@@ -15,6 +15,7 @@ class _ItemListScrollState extends State<ItemListScroll> {
     return Scaffold(
       backgroundColor: Color(0xFF0A0A0A),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Color(0xFFA855F7),
         title: Text(
@@ -63,6 +64,7 @@ class _ItemListScrollState extends State<ItemListScroll> {
               onPressed: () {
                 Navigator.push(
                   context,
+
                   MaterialPageRoute(builder: (_) => updating_Item_Screen()),
                 );
               },
