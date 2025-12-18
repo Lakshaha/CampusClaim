@@ -7,7 +7,7 @@ class ItemService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> uploadItem(Item item) async {
-    await _db.collection('item').add(item.toMap());
+    await _db.collection('items').add(item.toMap());
   }
 
   Stream<List<Item>> getAllItems() {

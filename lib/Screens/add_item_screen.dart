@@ -1,3 +1,5 @@
+import 'package:campus_claim/services/cloudinary_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
@@ -134,6 +136,7 @@ class _AddItemsListState extends State<AddItemsList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Color(0xFF0A0A0A),
       appBar: AppBar(
         centerTitle: true,
@@ -150,228 +153,249 @@ class _AddItemsListState extends State<AddItemsList> {
           ),
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(57, 107, 40, 0),
-            width: 306,
-            height: 334,
-            decoration: BoxDecoration(
-              color: Color(0xFFEDECEC),
-              borderRadius: BorderRadius.circular(30),
-            ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 20),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-
-              //mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //Text('Item Name'),
-                SizedBox(height: 29),
-                Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    width: 234,
-                    height: 30,
-                    child: TextField(
-                      textAlign: TextAlign.left,
-                      textAlignVertical: TextAlignVertical(y: 1),
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        hintText: "Item Name",
-                        hintStyle: TextStyle(
-                          fontFamily: 'Manrope',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFFFFFFFF),
-                        ),
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Color(0xFF0EA5E9),
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 18,
-                          horizontal: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 21),
-                Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    width: 234,
-                    height: 30,
-                    child: TextField(
-                      textAlign: TextAlign.left,
-                      textAlignVertical: TextAlignVertical(y: 1),
-                      controller: locationController,
-                      decoration: InputDecoration(
-                        hintText: "Last Location",
-                        hintStyle: TextStyle(
-                          fontFamily: 'Manrope',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFFFFFFFF),
-                        ),
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Color(0xFF0EA5E9),
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 18,
-                          horizontal: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 21),
-                Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    width: 234,
-                    height: 30,
-                    child: TextField(
-                      textAlign: TextAlign.left,
-                      textAlignVertical: TextAlignVertical(y: 1),
-                      controller: contactController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration(
-                        hintText: "Contact Number",
-                        hintStyle: TextStyle(
-                          fontFamily: 'Manrope',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFFFFFFFF),
-                        ),
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Color(0xFF0EA5E9),
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 18,
-                          horizontal: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 36),
                 Container(
-                  height: 110,
-                  width: 229,
+                  margin: EdgeInsets.fromLTRB(57, 107, 40, 0),
+                  width: 306,
+                  height: 334,
                   decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9),
-                    borderRadius: BorderRadius.circular(20),
-                    image: imageFile != null
-                        ? DecorationImage(
-                            image: FileImage(imageFile!),
-                            fit: BoxFit.cover,
-                          )
-                        : null,
+                    color: Color(0xFFEDECEC),
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                  child: imageFile == null
-                      ? Column(
-                          children: [
-                            SizedBox(height: 23),
-                            Center(
-                              child: Text(
-                                'Upload Picture',
-                                style: TextStyle(
-                                  fontFamily: 'Manrope',
-                                  fontSize: 20,
-                                  color: Color(0xFF4F46E5),
-                                ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      //Text('Item Name'),
+                      SizedBox(height: 29),
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          width: 234,
+                          height: 30,
+                          child: TextField(
+                            textAlign: TextAlign.left,
+                            textAlignVertical: TextAlignVertical(y: 1),
+                            controller: nameController,
+                            decoration: InputDecoration(
+                              hintText: "Item Name",
+                              hintStyle: TextStyle(
+                                fontFamily: 'Manrope',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFFFFFFFF),
+                              ),
+                              border: OutlineInputBorder(),
+                              filled: true,
+                              fillColor: Color(0xFF0EA5E9),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 18,
+                                horizontal: 20,
                               ),
                             ),
-                            IconButton(
-                              onPressed: () {
-                                showImageSourceDialog();
-                              },
-                              icon: Icon(
-                                Icons.upload,
-                                size: 27,
-                                color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 21),
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          width: 234,
+                          height: 30,
+                          child: TextField(
+                            textAlign: TextAlign.left,
+                            textAlignVertical: TextAlignVertical(y: 1),
+                            controller: locationController,
+                            decoration: InputDecoration(
+                              hintText: "Last Location",
+                              hintStyle: TextStyle(
+                                fontFamily: 'Manrope',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFFFFFFFF),
+                              ),
+                              border: OutlineInputBorder(),
+                              filled: true,
+                              fillColor: Color(0xFF0EA5E9),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 18,
+                                horizontal: 20,
                               ),
                             ),
-                          ],
-                        )
-                      : null,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 21),
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          width: 234,
+                          height: 30,
+                          child: TextField(
+                            textAlign: TextAlign.left,
+                            textAlignVertical: TextAlignVertical(y: 1),
+                            controller: contactController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            decoration: InputDecoration(
+                              hintText: "Contact Number",
+                              hintStyle: TextStyle(
+                                fontFamily: 'Manrope',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFFFFFFFF),
+                              ),
+                              border: OutlineInputBorder(),
+                              filled: true,
+                              fillColor: Color(0xFF0EA5E9),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 18,
+                                horizontal: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 36),
+                      Container(
+                        height: 110,
+                        width: 229,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFD9D9D9),
+                          borderRadius: BorderRadius.circular(20),
+                          image: imageFile != null
+                              ? DecorationImage(
+                                  image: FileImage(imageFile!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                        ),
+                        child: imageFile == null
+                            ? Column(
+                                children: [
+                                  SizedBox(height: 23),
+                                  Center(
+                                    child: Text(
+                                      'Upload Picture',
+                                      style: TextStyle(
+                                        fontFamily: 'Manrope',
+                                        fontSize: 20,
+                                        color: Color(0xFF4F46E5),
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      showImageSourceDialog();
+                                    },
+                                    icon: Icon(
+                                      Icons.upload,
+                                      size: 27,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : null,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                Container(
+                  height: 46,
+                  width: 146,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF59E0b),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (Check_condition()) {
+                        try {
+                          showMessage("Uploading...");
+
+                          String? imageUrl;
+
+                          if (imageFile != null) {
+                            imageUrl = await CloudinaryService.uploadImage(
+                              imageFile!,
+                            );
+                          }
+
+                          if (imageUrl != null) {
+                            showMessage("Image Upload Succesfully");
+                          } else {
+                            imageUrl = null;
+                          }
+
+                          final user = FirebaseAuth.instance.currentUser;
+                          if (user == null) {
+                            showMessage("Auth Error. Please restart the app");
+                            return;
+                          }
+
+                          //final uid = FirebaseAuth.instance.currentUser?.uid ?? "unknown";
+                          final item = Item(
+                            itemName: nameController.text.trim(),
+                            contactDetails: contactController.text.trim(),
+                            location: locationController.text.trim(),
+                            //createdAt: FieldValue.serverTimestamp(),
+                            imageUrl: imageUrl,
+                            isFound: false,
+                            userId: FirebaseAuth.instance.currentUser!.uid,
+                          );
+                          await itemService.uploadItem(item);
+
+                          showMessage("Item uploaded Successfully!");
+
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (_) => ItemListScroll()),
+                          );
+                        } catch (e) {
+                          showMessage("Error Uploading: $e");
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFF59E0B),
+                      //foregroundColor: Color(0xFFF59E0B),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Upload Item',
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontSize: 16,
+                          color: Color(0xFFFFFFFF),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 127),
-          Container(
-            height: 46,
-            width: 146,
-            decoration: BoxDecoration(
-              color: Color(0xFFF59E0b),
-              borderRadius: BorderRadius.circular(20),
-            ),
-
-            child: ElevatedButton(
-              onPressed: () async {
-                if (Check_condition()) {
-                  try {
-                    showMessage("Uploading...");
-                    String? imageUrl;
-                    // if (imageFile != null) {
-                    //   imageUrl = await storageService.uploadImage(imageFile!);
-                    // }
-
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user == null) {
-                      showMessage("Auth Error. Please restart the app");
-                      return;
-                    }
-
-                    //final uid = FirebaseAuth.instance.currentUser?.uid ?? "unknown";
-                    final item = Item(
-                      itemName: nameController.text.trim(),
-                      contactDetails: contactController.text.trim(),
-                      location: locationController.text.trim(),
-                      createdAt: DateTime.now(),
-                      imageUrl: null,
-                      userId: user.uid,
-                    );
-                    await itemService.uploadItem(item);
-
-                    showMessage("Item uploaded Successfully!");
-
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => ItemListScroll()),
-                    );
-                  } catch (e) {
-                    showMessage("Error Uploading: $e");
-                  }
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFF59E0B),
-                //foregroundColor: Color(0xFFF59E0B),
-              ),
-              child: Center(
-                child: Text(
-                  'Upload Item',
-                  style: TextStyle(
-                    fontFamily: 'Manrope',
-                    fontSize: 16,
-                    color: Color(0xFFFFFFFF),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
 
       bottomNavigationBar: Container(
@@ -388,10 +412,10 @@ class _AddItemsListState extends State<AddItemsList> {
           children: [
             IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => AddItemsList()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (_) => AddItemsList()),
+                // );
               },
               icon: Icon(Icons.upload, size: 36, color: Colors.black),
             ),

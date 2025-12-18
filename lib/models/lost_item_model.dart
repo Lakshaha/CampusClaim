@@ -6,9 +6,9 @@ class Item {
   final String itemName;
   final String contactDetails;
   final String location;
-  final String? imageUrl;
-  final DateTime createdAt;
+  String? imageUrl;
   final String userId;
+  final bool isFound;
 
   Item({
     this.id,
@@ -16,8 +16,8 @@ class Item {
     required this.contactDetails,
     required this.location,
     this.imageUrl,
-    required this.createdAt,
     required this.userId,
+    required this.isFound,
   });
 
   Map<String, dynamic> toMap() {
@@ -26,8 +26,9 @@ class Item {
       "contact": contactDetails,
       "imageUrl": imageUrl,
       "location": location,
-      "createdAt": createdAt,
+      "createdAt": FieldValue.serverTimestamp(), // 🔥 FIX
       "userId": userId,
+      "isFound": isFound,
     };
   }
 
@@ -35,12 +36,13 @@ class Item {
   factory Item.fromMap(Map<String, dynamic> data, String docId) {
     return Item(
       id: docId,
-      itemName: data['itemName'],
-      contactDetails: data['contact'],
-      location: data['location'],
+      itemName: data['itemName'] ?? 'No name',
+      contactDetails: data['contact'] ?? 'No Contact',
+      location: data['location'] ?? 'No loc',
       imageUrl: data['imageUrl'],
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      //createdAt: (data['createdAt'] as Timestamp).toDate(),
       userId: (data['userId']),
+      isFound: data['isFound'] ?? false,
     );
   }
 }
