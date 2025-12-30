@@ -1,5 +1,4 @@
 import 'package:campus_claim/services/cloudinary_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
