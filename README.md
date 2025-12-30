@@ -1,21 +1,22 @@
-<<<<<<< HEAD
-# campus_claim
+📱 Campus Claim – Lost & Found App
 
-A new Flutter project.
+Campus Claim is a cross-platform mobile application built with Flutter that helps users report, browse, and recover lost and found items within a campus or community.
+The app works on Android and iOS and uses Firebase for backend services.
 
-## Getting Started
+🚀 Features
 
-This project is a starting point for a Flutter application.
+🔐 User authentication (Firebase Auth)
 
-A few resources to get you started if this is your first Flutter project:
+📸 Upload lost/found items with images
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+📝 Add item details (title, description, location, date)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# CampusClaim
-The CampusClaim App is a lightweight mobile application designed to help students report lost belongings and browse items reported by others.
->>>>>>> 7e8f6b1cc09c6bddb0d1c826985e4853ae2abd3a
+📃 Browse all reported items
+
+👤 View items uploaded by the current user
+
+☁️ Real-time data sync using Firestore
+
+📦 Image storage using Firebase Storage / Cloudinary
+
+📱 Cross-platform (Android & iOS)
